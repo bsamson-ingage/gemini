@@ -3,579 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kentucky Bourbon & Fall Getaway</title>
+    <title>Our Kentucky Trip Plan (Nov 7-9)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #f7fafc;
         }
-        .timeline-item:last-child .timeline-line {
-            display: none;
-        }
-        .header-bg {
-            background-color: #233a4c;
-        }
-        .accent-bg {
-            background-color: #a0403d;
-        }
-        .accent-text {
-            color: #a0403d;
-        }
-        .accent-border {
-            border-color: #a0403d;
-        }
-        .secondary-text {
-            color: #8c675a;
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .chart-container {
+            position: relative;
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .timeline {
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+        .timeline-marker {
+            position: absolute;
+            left: -0.75rem;
+            top: 0.125rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 50;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
+            font-size: 0.75rem;
         }
-        .modal-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            transform: scale(0.95);
-            transition: transform 0.3s;
-        }
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-        }
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #a0403d;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .info-sparkle {
-            color: #a0403d;
-            cursor: pointer;
-            font-weight: bold;
-            display: inline-block;
-            margin-left: 4px;
-            transition: transform 0.2s;
-        }
-        .info-sparkle:hover {
-            transform: scale(1.2);
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #cbd5e0;
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="bg-gray-50 text-[#2E2552]">
+    
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
 
-    <header class="header-bg text-white p-6 md:p-10 shadow-lg">
-        <div class="container mx-auto max-w-5xl text-center">
-            <h1 class="text-3xl md:text-5xl font-bold mb-2">🍁 Kentucky Bourbon & Fall Getaway 🥃</h1>
-            <p class="text-lg md:text-xl text-gray-300">November 7 - 9, 2025</p>
-        </div>
-    </header>
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-[#6B4593] mb-4">Our Kentucky Getaway</h1>
+            <p class="text-xl md:text-2xl font-light text-gray-600">November 7th - 9th, 2025</p>
+        </header>
 
-    <main class="container mx-auto max-w-5xl p-4 md:p-8">
-
-        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 class="text-2xl font-bold secondary-text mb-4 text-center">Your Trip at a Glance</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <span class="text-4xl">🏠</span>
-                    <h3 class="font-semibold text-lg secondary-text">Home Base</h3>
-                    <p class="text-gray-700">Raywick, KY</p>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <span class="text-4xl">🥃</span>
-                    <h3 class="font-semibold text-lg secondary-text">Main Hub</h3>
-                    <p class="text-gray-700">Bardstown, KY</p>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <span class="text-4xl">🗺️</span>
-                    <h3 class="font-semibold text-lg secondary-text">Key Regions</h3>
-                    <p class="text-gray-700">Frankfort, Clermont, Loretto</p>
-                </div>
-            </div>
-            
-            <div class="text-center mt-8 mb-4">
-                <a href="https://www.google.com/maps/dir/Cincinnati,+OH/Buffalo+Trace+Distillery,+Frankfort,+KY/Bardstown,+KY/Bernheim+Arboretum+and+Research+Forest,+Clermont,+KY/Raywick,+KY/Maker's+Mark+Distillery,+Loretto,+KY" target="_blank" class="inline-block accent-bg text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-all">
-                    Click Here to View Your Trip on Google Maps
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="md:col-span-2 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-[#F55D5D] mb-4">The Game Plan</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Looks like Friday will be a rainy washout, but Saturday is gonna be perfect. I've built the plan around that: we'll do all the indoor/travel stuff on Friday and save our big outdoor adventure for Saturday!
+                </p>
+                <a href="https://maps.app.goo.gl/uwFBwfdoombzGJxD7" target="_blank" rel="noopener noreferrer" class="inline-block w-full text-center bg-[#74E5E0] text-[#2E2552] font-bold py-3 px-6 rounded-lg shadow-md hover:bg-opacity-90 transition-all">
+                    Open Our Google Map of All Locations
                 </a>
             </div>
-        </section>
-
-        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 class="text-2xl font-bold secondary-text mb-4 text-center">✨ Your AI Travel Assistant</h2>
-            <div class="text-center mb-4">
-                <button id="packing-list-btn" onclick="getPackingList()" class="accent-bg text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-all">
-                    ✨ Get Your Packing List
-                </button>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold text-[#6B4593] mb-3 text-center">Trip at a Glance</h3>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                        <span class="text-4xl font-extrabold text-[#F55D5D]">3</span>
+                        <span class="block text-sm font-medium text-gray-600">Days</span>
+                    </div>
+                    <div>
+                        <span class="text-4xl font-extrabold text-[#F55D5D]">2</span>
+                        <span class="block text-sm font-medium text-gray-600">People</span>
+                    </div>
+                    <div>
+                        <span class="text-4xl font-extrabold text-[#F55D5D]">1</span>
+                        <span class="block text-sm font-medium text-gray-600">Cottage</span>
+                    </div>
+                </div>
             </div>
-            <div id="packing-list-container" class="bg-gray-50 p-4 rounded-lg hidden prose max-w-none"></div>
         </section>
 
-        <section class="mb-8">
-            <h2 class="text-3xl font-bold text-center secondary-text mb-6">🗓️ Friday, Nov 7: The Distillery Trail</h2>
+        <section class="bg-white rounded-lg shadow-md p-6 md:p-8 mb-12">
+            <h2 class="text-4xl font-extrabold text-center mb-8">
+                <span class="text-[#F55D5D]">🌧️ Friday, Nov 7:</span> Rainy Travel & Indoor Tour Day
+            </h2>
+            <p class="text-lg text-center text-gray-600 mb-10 -mt-6">Our Goal: Get to Raywick, stay dry, and hit the indoor tours.</p>
+            
+            <div class="timeline max-w-3xl mx-auto">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-[#74E5E0] text-[#2E2552]">🚗</div>
+                    <time class="block text-sm font-semibold text-gray-500 mb-1">9:30 AM - 11:00 AM</time>
+                    <h3 class="text-xl font-bold text-[#6B4593]">Leave Cincy</h3>
+                    <p class="text-gray-700">We can leave as late as 11:00 AM to start the drive.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-[#74E5E0] text-[#2E2552]">🐃</div>
+                    <time class="block text-sm font-semibold text-gray-500 mb-1">11:00 AM - 1:00 PM</time>
+                    <h3 class="text-xl font-bold text-[#6B4593]">Buffalo Trace Stop (Frankfort)</h3>
+                    <p class="text-gray-700">Washout plan! We'll skip the 12 PM outdoor tour and just hit the indoor Visitor Center and Gift Shop to look around.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-[#74E5E0] text-[#2E2552]">🍽️</div>
+                    <time class="block text-sm font-semibold text-gray-500 mb-1">1:00 PM</time>
+                    <h3 class="text-xl font-bold text-[#6B4593]">Lunch in Frankfort</h3>
+                    <p class="text-gray-700">Quick stop. Our pick: <span class="font-semibold">Heavens to Betsy! Bakery & Deli</span> or <span class="font-semibold">The Colombian Corner</span>.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-[#74E5E0] text-[#2E2552]">🏛️</div>
+                    <time class="block text-sm font-semibold text-gray-500 mb-1">3:00 PM - 4:00 PM</time>
+                    <h3 class="text-xl font-bold text-[#6B4593]">Quick Stop in Bardstown</h3>
+                    <p class="text-gray-700">We've got an hour before my tour. Perfect for the <span class="font-semibold">Basilica of St. Joseph Proto-Cathedral</span>. It's free, indoors, and a quick 30-min stop.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-[#74E5E0] text-[#2E2552]">🥃</div>
+                    <time class="block text-sm font-semibold text-gray-500 mb-1">4:15 PM - 5:30 PM</time>
+                    <h3 class="text-xl font-bold text-[#6B4593]">Heaven Hill "Split Activity"</h3>
+                    <p class="text-gray-700"><span class="font-semibold">Brian:</span> Goes on the booked 4:15 PM tour (45 min).</p>
+                    <p class="text-gray-700"><span class="font-semibold">Lisa:</span> Relaxes in the visitor center (free museum, Five Brothers Bar, gift shop).</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-[#74E5E0] text-[#2E2552]">🏠</div>
+                    <time class="block text-sm font-semibold text-gray-500 mb-1">5:30 PM - 6:00 PM</time>
+                    <h3 class="text-xl font-bold text-[#6B4593]">Check In</h3>
+                    <p class="text-gray-700">Drive to Raywick (30-35 min) & check into our cottage.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-[#F8B46D] text-[#2E2552]">🍔</div>
+                    <time class="block text-sm font-semibold text-gray-500 mb-1">7:30 PM</time>
+                    <h3 class="text-xl font-bold text-[#6B4593]">Dinner</h3>
+                    <p class="text-gray-700">Two choices: <span class="font-semibold">Backroad Burger Co.</span> in Raywick (if we're tired) or <span class="font-semibold">The Old Talbott Tavern</span> in Bardstown (historic & cozy).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-lg shadow-md p-6 md:p-8 mb-12">
+            <h2 class="text-4xl font-extrabold text-center mb-8">
+                <span class="text-[#74E5E0]">☀️ Saturday, Nov 8:</span> Outdoor Active Day
+            </h2>
+            <p class="text-lg text-center text-gray-600 mb-10 -mt-6">Our Goal: Main day for hiking and exploring!</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold text-[#6B4593] mb-4">Morning (9:30 AM - 1:00 PM)</h3>
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h4 class="text-xl font-bold text-[#F55D5D] mb-2">🥾 Main Hike: Bernheim Arboretum</h4>
+                        <p class="text-gray-700 mb-4">Our top pick. Two must-do's:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">Forest Giants Trail</span> (2-mile loop)</li>
+                            <li><span class="font-semibold">Canopy Tree Walk</span> (75 ft. up)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200 mt-6">
+                        <h4 class="text-xl font-bold text-[#F55D5D] mb-2">🍽️ Lunch (1:00 PM)</h4>
+                        <p class="text-gray-700"><span class="font-semibold">Perfect Spot:</span> <span class="font-semibold text-[#6B4593]">The Kitchen Table</span> (at Jim Beam) is right next to Bernheim.</p>
+                        <p class="text-gray-700"><span class="font-semibold">Alt:</span> Drive to Bardstown for <span class="font-semibold text-[#6B4593]">Bourbon Trail BBQ & Amish Deli</span>.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-[#6B4593] mb-4">Afternoon (2:30 PM - 5:00 PM)</h3>
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h4 class="text-xl font-bold text-[#F55D5D] mb-4">🗺️ Choose Our Adventure!</h4>
+                        <div class="space-y-3">
+                            <p><span class="font-bold text-[#6B4593]">Option 1: History Hike</span> - Abraham Lincoln Birthplace & Knob Creek Trail.</p>
+                            <p><span class="font-bold text-[#6B4593]">Option 2: Scenic Bourbon</span> - Maker's Mark. Walk the grounds for free.</p>
+                            <p><span class="font-bold text-[#6B4593]">Option 3: Winery</span> - Springhill Winery. Relax and taste local wine.</p>
+                            <p><span class="font-bold text-[#6B4593]">Option 4: Indoor History</span> - Women's Civil War Museum & Oscar Getz Museum.</p>
+                            <p><span class="font-bold text-[#6B4593]">Option 5: Modern Vibe</span> - Bardstown Bourbon Co. See campus, grab a cocktail.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200 mt-6">
+                        <h4 class="text-xl font-bold text-[#F55D5D] mb-2">🍻 Evening: Dinner in Bardstown</h4>
+                        <p class="text-gray-700"><span class="font-semibold">Top Pick:</span> <span class="font-semibold text-[#6B4593]">Scout & Scholar Brewing Co.</span> (Upscale-casual burgers).</p>
+                        <p class="text-gray-700"><span class="font-semibold">Other Options:</span> Get reservations at <span class="font-semibold text-[#6B4593]">Toogie's Table</span> or explore.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
-                <div class="flex flex-col">
+                <h2 class="text-4xl font-extrabold text-center mb-8">
+                    <span class="text-[#F8B46D]">⛪ Sunday, Nov 9:</span> Peaceful Departure Day
+                </h2>
+                <p class="text-lg text-center text-gray-600 mb-10 -mt-6">Our Goal: A slow, special morning, then head home.</p>
+
+                <div class="timeline max-w-3xl mx-auto">
+                    <div class="timeline-line"></div>
                     
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🚗</div></div>
-                            <div class="w-px h-full bg-gray-300 timeline-line"></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">9:30 AM: Drive Cincy ➔ Frankfort</p>
-                            <p class="text-gray-600">(Approx. 1.5 - 2 hours)</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🐃</div></div>
-                            <div class="w-px h-full bg-gray-300 timeline-line"></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p classL="text-xl font-semibold secondary-text">
-                                12:00 PM - 1:30 PM: Buffalo Trace (Frankfort)
-                                <span class="info-sparkle" onclick="getFunFact('Buffalo Trace Distillery')">✨</span>
-                            </p>
-                            <p class="text-gray-600">You & Lisa: Enjoy the pre-booked (and free!) tour and tasting together.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🥪</div></div>
-                            <div class="w-px h-full bg-gray-300 timeline-line"></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">1:30 PM - 2:30 PM: Lunch in Frankfort</p>
-                            <p class="text-gray-600">Quick, casual stop. Try Staxx BBQ.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🚗</div></div>
-                            <div class="w-px h-full bg-gray-300 timeline-line"></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">2:30 PM - 3:30 PM: Drive to Bardstown</p>
-                            <p class="text-gray-600">(Approx. 1 hour)</p>
-                        </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-[#F8B46D] text-[#2E2552]">🎒</div>
+                        <time class="block text-sm font-semibold text-gray-500 mb-1">9:00 AM - 9:45 AM</time>
+                        <h3 class="text-xl font-bold text-[#6B4593]">Pack & Check Out</h3>
+                        <p class="text-gray-700">We'll pack up the cottage first so we don't have to backtrack.</p>
                     </div>
 
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🥃</div></div>
-                            <div class="w-px h-full bg-gray-300 timeline-line"></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">
-                                4:15 PM - 5:45 PM: Heaven Hill Experience
-                                <span class="info-sparkle" onclick="getFunFact('Heaven Hill Bourbon Experience')">✨</span>
-                            </p>
-                            <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-gray-100 p-4 rounded-lg">
-                                    <h4 class="font-bold">You:</h4>
-                                    <p class="text-gray-700">Go on your booked 4:15 PM Tour & Tasting.</p>
-                                </div>
-                                <div class="bg-gray-100 p-4 rounded-lg">
-                                    <h4 class="font-bold">Lisa:</h4>
-                                    <p class="text-gray-700">Relax in the visitor center. Explore the free museum, visit the Five Brothers Bar, or browse the gift shop.</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-[#F8B46D] text-[#2E2552]">✝️</div>
+                        <time class="block text-sm font-semibold text-gray-500 mb-1">10:20 AM - 11:45 AM</time>
+                        <h3 class="text-xl font-bold text-[#6B4593]">Attend Mass at the Abbey</h3>
+                        <p class="text-gray-700">Drive to the <span class="font-semibold">Abbey of Gethsemani</span> (20 min). Attend the 10:20 AM Terce (short prayer) followed by Mass. A very unique option!</p>
                     </div>
 
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🔑</div></div>
-                            <div class="w-px h-full bg-gray-300 timeline-line"></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">6:15 PM - 6:30 PM: Check-in</p>
-                            <p class="text-gray-600">Drive Bardstown ➔ Raywick Cottage (Approx. 30-35 mins)</p>
-                        </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-[#F8B46D] text-[#2E2552]">🧀</div>
+                        <time class="block text-sm font-semibold text-gray-500 mb-1">11:45 AM - 12:15 PM</time>
+                        <h3 class="text-xl font-bold text-[#6B4593]">Abbey Gift Shop</h3>
+                        <p class="text-gray-700">Stop for Trappist cheese and bourbon fudge for the road!</p>
                     </div>
 
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🍽️</div></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">7:30 PM: Dinner in Bardstown</p>
-                            <p class="text-gray-600">Recommendation: The Old Talbott Tavern for a cozy, historic first night.</p>
-                        </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-[#F8B46D] text-[#2E2552]">🍔</div>
+                        <time class="block text-sm font-semibold text-gray-500 mb-1">12:30 PM</time>
+                        <h3 class="text-xl font-bold text-[#6B4593]">Final Local Lunch</h3>
+                        <p class="text-gray-700">Grab a bite at <span class="font-semibold">Howie's Family Restaurant</span> (New Haven) or <span class="font-semibold">Backroad Burger Co.</span> (if we missed it Friday).</p>
                     </div>
-
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-[#F8B46D] text-[#2E2552]">🚗</div>
+                        <time class="block text-sm font-semibold text-gray-500 mb-1">1:15 PM</time>
+                        <h3 class="text-xl font-bold text-[#6B4593]">Start Drive Home</h3>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <section class="mb-8">
-            <h2 class="text-3xl font-bold text-center secondary-text mb-6">🗓️ Saturday, Nov 8: The "Flex Day"</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-2xl font-bold secondary-text mb-4 text-center">☀️ Plan A (Good Weather)</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <span class="accent-text font-bold text-xl mr-3">MORNING:</span>
-                            <div class="flex-1">
-                                <p class="font-semibold">
-                                    Hike at Bernheim Arboretum
-                                    <span class="info-sparkle" onclick="getFunFact('Bernheim Arboretum and Research Forest')">✨</span>
-                                </p>
-                                <p class="text-sm text-gray-600">Don't Miss: The Forest Giants Trail & Canopy Tree Walk.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="accent-text font-bold text-xl mr-3">LUNCH:</span>
-                            <div class="flex-1">
-                                <p class="font-semibold">Isaac's Café (at Bernheim)</p>
-                                <p class="text-sm text-gray-600">...or Mammy's Kitchen in Bardstown.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="accent-text font-bold text-xl mr-3">AFTERNOON:</span>
-                            <div class="flex-1">
-                                <p class="font-semibold">Explore Historic Bardstown</p>
-                                <p class="text-sm text-gray-600">Visit the Oscar Getz Museum & browse shops on Court Square.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="accent-text font-bold text-xl mr-3">EVENING:</span>
-                            <div class="flex-1">
-                                <p class="font-semibold">Cozy Dinner</p>
-                                <p class="text-sm text-gray-600">Enjoy as the rain might move in.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-2xl font-bold secondary-text mb-4 text-center">🌧️ Plan B (Rainy Day)</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <span class="accent-text font-bold text-xl mr-3">MORNING:</span>
-                            <div class="flex-1">
-                                <p class="font-semibold">
-                                    My Old Kentucky Home
-                                    <span class="info-sparkle" onclick="getFunFact('My Old Kentucky Home State Park')">✨</span>
-                                </p>
-                                <p class="text-sm text-gray-600">Take the indoor tour of the historic mansion.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="accent-text font-bold text-xl mr-3">LUNCH:</span>
-                            <div class="flex-1">
-                                <p class="font-semibold">The Bar at Willett</p>
-                                <p class="text-sm text-gray-600">*Reservations Essential!* Famous cocktails & small plates.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="accent-text font-bold text-xl mr-3">AFTERNOON:</span>
-                            <div class="flex-1">
-                                <p class="font-semibold">Stay Warm & Dry</p>
-                                <p class="text-sm text-gray-600">
-                                    Visit the Oscar Getz Museum or the 
-                                    Abbey of Gethsemani
-                                    <span class="info-sparkle" onclick="getFunFact('Abbey of Gethsemani')">✨</span>
-                                </p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="accent-text font-bold text-xl mr-3">EVENING:</span>
-                            <div class="flex-1">
-                                <p class="font-semibold">Leisurely Dinner</p>
-                                <p class="text-sm text-gray-600">Enjoy a long, warm meal in Bardstown.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-8">
-            <h2 class="text-3xl font-bold text-center secondary-text mb-6">🗓️ Sunday, Nov 9: The Loretto Loop</h2>
             <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
-                <div class="flex flex-col">
-                    
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🌅</div></div>
-                            <div class="w-px h-full bg-gray-300 timeline-line"></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">Morning: Check Out</p>
-                            <p class="text-gray-600">Check out of your Raywick cottage.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🚗</div></div>
-                            <div class="w-px h-full bg-gray-300 timeline-line"></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">
-                                Last Stop: Maker's Mark (Loretto)
-                                <span class="info-sparkle" onclick="getFunFact('Maker\'s Mark Distillery')">✨</span>
-                            </p>
-                            <p class="text-gray-600 mb-4">A perfect stop, very close to Raywick. No tour needed!</p>
-                            <div class="bg-gray-100 p-4 rounded-lg">
-                                <h4 class="font-bold">Activity (For Both):</h4>
-                                <p class="text-gray-700">It's free to walk the stunning grounds and see the historic buildings.</p>
-                                <h4 class="font-bold mt-2">Activity (For You):</h4>
-                                <p class="text-gray-700">Go to the gift shop to hand-dip your own bottle in the signature red wax.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex timeline-item">
-                        <div class="flex flex-col items-center mr-4">
-                            <div><div class="flex items-center justify-center w-12 h-12 accent-bg rounded-full text-white text-2xl">🏠</div></div>
-                        </div>
-                        <div class="pb-8 w-full">
-                            <p class="text-xl font-semibold secondary-text">Afternoon: Drive Home</p>
-                            <p class="text-gray-600">Begin your journey back.</p>
-                        </div>
-                    </div>
-
+                <h3 class="text-2xl font-bold text-center text-[#6B4593] mb-4">Trip Focus</h3>
+                <p class="text-gray-700 text-center mb-4">Here's a rough breakdown of how we'll be spending our time. A pretty perfect balance!</p>
+                <div class="chart-container">
+                    <canvas id="tripFocusChart"></canvas>
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2 class="text-3xl font-bold text-center secondary-text mb-6">🍽️ At-a-Glance: Food & Drink</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-bold secondary-text border-b accent-border pb-2 mb-4">Friday Lunch (Frankfort)</h3>
-                    <div classD="space-y-4">
-                        <div>
-                            <h4 class="font-bold text-gray-900">Staxx BBQ</h4>
-                            <p class="text-sm text-gray-600">Known for classic, quick-stop Kentucky barbecue. Perfect for a fast and hearty meal.</p>
-                            <p class="text-sm font-semibold mt-1"><span class="accent-text">Price:</span> $ <span class="text-gray-400">|</span> <span class="accent-text">Reservations:</span> Not Required</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-bold secondary-text border-b accent-border pb-2 mb-4">Friday Dinner (Bardstown)</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-bold text-gray-900">
-                                The Old Talbott Tavern
-                                <span class="info-sparkle" onclick="getFunFact('The Old Talbott Tavern')">✨</span>
-                            </h4>
-                            <p class="text-sm text-gray-600">Famous historic tavern (1779) with Southern fare. Known for its cozy, rustic, and reportedly haunted atmosphere.</p>
-                            <p class="text-sm font-semibold mt-1"><span class="accent-text">Price:</span> $$ <span class="text-gray-400">|</span> <span class="accent-text">Reservations:</span> Recommended</p>
-                        </div>
-                        <div class="mt-4">
-                            <h4 class="font-bold text-gray-900">The Rickhouse</h4>
-                            <p class="text-sm text-gray-600">Upscale steakhouse in a historic hall. Features a massive bourbon list and an elegant, moody setting.</p>
-                            <p class="text-sm font-semibold mt-1"><span class="accent-text">Price:</span> $$$ <span class="text-gray-400">|</span> <span class="accent-text">Reservations:</span> Recommended</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-bold secondary-text border-b accent-border pb-2 mb-4">Saturday Lunch Options</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-bold text-gray-900">
-                                The Bar at Willett
-                                <span class="info-sparkle" onclick="getFunFact('The Bar at Willett')">✨</span>
-                            </h4>
-                            <p class="text-sm text-gray-600">Gourmet small plates and legendary craft cocktails at the distillery. A high-end experience.</p>
-                            <p class="text-sm font-semibold mt-1"><span class="accent-text">Price:</span> $$$ <span class="text-gray-400">|</span> <span class="accent-text">Reservations:</span> Essential (Book far ahead)</p>
-                        </div>
-                        <div class="mt-4">
-                            <h4 class="font-bold text-gray-900">Mammy's Kitchen</h4>
-                            <p class="text-sm text-gray-600">The local spot for casual, down-home Southern comfort food like fried chicken, burgers, and hearty breakfasts.</p>
-                            <p class="text-sm font-semibold mt-1"><span class="accent-text">Price:</span> $ <span class="text-gray-400">|</span> <span class="accent-text">Reservations:</span> Not Required</p>
-                        </div>
-                        <div class="mt-4">
-                            <h4 class="font-bold text-gray-900">Isaac's Café (Bernheim)</h4>
-                            <p class="text-sm text-gray-600">Located in the visitor center, perfect for a quick bite. Uses fresh, local ingredients for soups, salads, and sandwiches.</p>
-                            <p class="text-sm font-semibold mt-1"><span class="accent-text">Price:</span> $ <span class="text-gray-400">|</span> <span class="accent-text">Reservations:</span> Not Required</Method>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-bold secondary-text border-b accent-border pb-2 mb-4">Saturday Dinner (Bardstown)</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-bold text-gray-900">Scout & Scholar Brewing Co.</h4>
-                            <p class="text-sm text-gray-600">A modern craft brewery with a full menu of upscale pub food, from great burgers to more composed dishes.</p>
-                            <p class="text-sm font-semibold mt-1"><span class="accent-text">Price:</span> $$ <span class="text-gray-400">|</span> <span class="accent-text">Reservations:</span> Recommended</p>
-                        </div>
-                        <div class="mt-4">
-                            <h4 class="font-bold text-gray-900">Toogie's Table</h4>
-                            <p class="text-sm text-gray-600">Stylish restaurant featuring modern American and Southern dishes, often using farm-to-table ingredients.</p>
-                            <p class="text-sm font-semibold mt-1"><span class="accent-text">Price:</span> $$-$$$ <span class="text-gray-400">|</span> <span class="accent-text">Reservations:</span> Recommended</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="text-center p-6 mt-8 text-gray-500 text-sm">
-        <p>This infographic was generated based on your travel plans. Enjoy your trip!</p>
-    </footer>
-
-    <div id="info-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="modal-title" class="text-2xl font-bold secondary-text"></h3>
-                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
-            </div>
-            <div id="modal-body" class="prose max-w-none">
-                <div class="loader"></div>
-            </div>
-        </div>
     </div>
 
     <script>
-        const modal = document.getElementById('info-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalBody = document.getElementById('modal-body');
-        const packingListContainer = document.getElementById('packing-list-container');
-        const packingListBtn = document.getElementById('packing-list-btn');
-
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-        async function callGeminiApi(promptText, maxRetries = 3) {
-            const payload = {
-                contents: [{ parts: [{ text: promptText }] }],
-            };
-
-            let attempt = 0;
-            while (attempt < maxRetries) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        if (response.status === 429 || response.status >= 500) {
-                            throw new Error(`Retryable error: ${response.status}`);
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('tripFocusChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Bourbon Time', 'Hiking & Nature', 'Food & Relaxing', 'History & Culture'],
+                    datasets: [{
+                        label: 'Trip Focus',
+                        data: [30, 30, 20, 20],
+                        backgroundColor: [
+                            '#F55D5D',
+                            '#74E5E0',
+                            '#F8B46D',
+                            '#6B4593'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#2E2552',
+                                font: {
+                                    family: 'Inter',
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                }
+                            }
                         }
-                        return `Error: ${response.statusText}`;
                     }
-
-                    const result = await response.json();
-                    const candidate = result.candidates?.[0];
-
-                    if (candidate && candidate.content?.parts?.[0]?.text) {
-                        return candidate.content.parts[0].text;
-                    } else {
-                        return "Error: No content found in response.";
-                    }
-                } catch (error) {
-                    attempt++;
-                    if (attempt >= maxRetries) {
-                        return "Error: Failed to get a response after multiple attempts.";
-                    }
-                    const delay = Math.pow(2, attempt) * 1000;
-                    await new Promise(res => setTimeout(res, delay));
                 }
-            }
-            return "Error: Failed to generate content.";
-        }
-
-        function showModal(title) {
-            modalTitle.innerText = title;
-            modalBody.innerHTML = '<div class="loader"></div>';
-            modal.classList.add('show');
-        }
-
-        function closeModal() {
-            modal.classList.remove('show');
-        }
-
-        async function getFunFact(locationName) {
-            showModal(locationName);
-            const prompt = `Tell me a fun fact or a brief, interesting historical detail about "${locationName}" in Kentucky. Keep it concise, engaging, and under 100 words.`;
-            const fact = await callGeminiApi(prompt);
-            modalBody.innerHTML = fact.replace(/\n/g, '<br>');
-        }
-
-        function formatPackingList(text) {
-            let html = text
-                .split('\n')
-                .map(line => {
-                    line = line.trim();
-                    if (line.startsWith('* ') || line.startsWith('- ')) {
-                        return `<li>${line.substring(2).trim()}</li>`;
-                    }
-                    if (line.match(/^[\w\s]+:$/)) {
-                        return `</ul><h4 class="font-bold mt-4 mb-2">${line}</h4><ul>`;
-                    }
-                    if (line.match(/^\*?\*?[\w\s]+\*?\*?:?$/) && line.length < 50 && !line.startsWith(' -')) {
-                         return `</ul><h4 class="font-bold mt-4 mb-2">${line.replace(/\*/g, '')}</h4><ul>`;
-                    }
-                    return line;
-                })
-                .join('');
-            
-            return `<ul>${html}</ul>`.replace(/<ul><\/ul>/g, '');
-        }
-
-        async function getPackingList() {
-            packingListContainer.innerHTML = '<div class="loader"></div>';
-            packingListContainer.classList.remove('hidden');
-            packingListBtn.disabled = true;
-            packingListBtn.innerText = "Generating...";
-
-            const prompt = `Generate a detailed packing list for a 3-day weekend trip (Friday, Nov 7 - Sunday, Nov 9) to the Kentucky Bourbon Trail (Raywick/Bardstown area). The weather in early November is cool with a chance of rain on Saturday. Activities include a mix of distillery tours (some walking, some indoor), a nature hike at Bernheim Arboretum, and nice (but not black-tie) dinners. Use markdown for formatting, with categories.`;
-            
-            const listText = await callGeminiApi(prompt);
-            
-            packingListContainer.innerHTML = formatPackingList(listText);
-            packingListBtn.innerText = "✨ Your Packing List is Ready!";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-
+            });
+        });
     </script>
+
 </body>
 </html>
 
